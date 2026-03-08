@@ -1,0 +1,14 @@
+{
+    "name": "itab-nav-fullstack",
+    "version": "1.0.0",
+    "description": "iTab Navigation Website - Cloudflare Pages Fullstack",
+    "scripts": {
+        "dev": "wrangler pages dev public --d1 DB --kv ICONS",
+        "deploy": "wrangler pages deploy public",
+        "db:init:local": "wrangler d1 execute itab-nav-db --local --file=./migrations/0001_initial.sql",
+        "db:init:remote": "wrangler d1 execute itab-nav-db --remote --file=./migrations/0001_initial.sql"
+    },
+    "devDependencies": {
+        "wrangler": "^3.0.0"
+    }
+}

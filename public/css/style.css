@@ -1,0 +1,461 @@
+/* ============================================
+ * iTab 导航网站 (全栈版) - 主样式表
+ * 增加特性：自定义背景、自定义卡片大小、卡片透明度
+ * ============================================ */
+
+:root {
+    --bg-primary: #f0f2f5;
+    --bg-card: rgba(255, 255, 255, 0.65);
+    /* 默认透明度，可通过内联样式覆盖 */
+    --bg-card-hover: rgba(255, 255, 255, 0.9);
+    --bg-header: rgba(255, 255, 255, 0.6);
+    --bg-search: rgba(255, 255, 255, 0.8);
+    --bg-tag: rgba(0, 0, 0, 0.05);
+    --bg-tag-active: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    --text-primary: #1a1a2e;
+    --text-secondary: #555770;
+    --text-muted: #8e8ea0;
+    --text-tag: #555770;
+    --text-tag-active: #ffffff;
+
+    --border-color: rgba(0, 0, 0, 0.06);
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+    --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow-header: 0 1px 20px rgba(0, 0, 0, 0.06);
+
+    --gradient-bg: linear-gradient(135deg, #e8ecf6 0%, #f5e6f0 50%, #e6f0f5 100%);
+    --gradient-accent: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    --blur-amount: 20px;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0f0f1a;
+    --bg-card: rgba(35, 35, 60, 0.55);
+    --bg-card-hover: rgba(55, 55, 85, 0.75);
+    --bg-header: rgba(20, 20, 40, 0.7);
+    --bg-search: rgba(40, 40, 65, 0.8);
+    --bg-tag: rgba(255, 255, 255, 0.06);
+    --bg-tag-active: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    --text-primary: #e8e8f0;
+    --text-secondary: #a0a0b8;
+    --text-muted: #6e6e88;
+    --text-tag: #a0a0b8;
+    --text-tag-active: #ffffff;
+
+    --border-color: rgba(255, 255, 255, 0.06);
+    --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.25);
+    --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --shadow-header: 0 1px 20px rgba(0, 0, 0, 0.3);
+
+    --gradient-bg: linear-gradient(135deg, #0f0f1a 0%, #1a1028 50%, #0f1a20 100%);
+}
+
+/* 基础重置 */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 动态背景层 */
+.dynamic-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: var(--gradient-bg);
+    background-size: cover;
+    background-position: center;
+    transition: all 1s ease;
+}
+
+/* 彩色浮动光球 (仅在不使用图片背景时显示) */
+.dynamic-bg.show-orbs::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.12) 0%, transparent 70%);
+    animation: floatOrb 20s ease-in-out infinite;
+}
+
+.dynamic-bg.show-orbs::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -15%;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(118, 75, 162, 0.10) 0%, transparent 70%);
+    animation: floatOrb 25s ease-in-out infinite reverse;
+}
+
+@keyframes floatOrb {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    25% {
+        transform: translate(30px, -40px) scale(1.05);
+    }
+
+    50% {
+        transform: translate(-20px, 20px) scale(0.95);
+    }
+
+    75% {
+        transform: translate(15px, 30px) scale(1.02);
+    }
+}
+
+/* 顶部导航栏 */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-header);
+    backdrop-filter: blur(var(--blur-amount));
+    -webkit-backdrop-filter: blur(var(--blur-amount));
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-header);
+    transition: background var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
+
+.search-wrapper {
+    flex: 1;
+    max-width: 460px;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+    background: var(--bg-search);
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.search-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.theme-toggle,
+.admin-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.theme-toggle:hover,
+.admin-link:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+}
+
+/* 主内容容器 */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+    position: relative;
+    z-index: 1;
+}
+
+.category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+}
+
+.category-tab {
+    padding: 8px 20px;
+    border-radius: var(--radius-xl);
+    border: 1px solid transparent;
+    background: var(--bg-tag);
+    color: var(--text-tag);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(4px);
+}
+
+.category-tab:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
+.category-tab.active {
+    background: var(--bg-tag-active);
+    color: var(--text-tag-active);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* 导航卡片 CSS Grid 布局 - 支持各种卡片尺寸 */
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-auto-flow: dense;
+    gap: 16px;
+}
+
+.nav-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px 16px;
+    border-radius: var(--radius-md);
+    /* 背景颜色和透明度由 JS 内联样式控制 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all var(--transition-smooth);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: cardFadeIn 0.4s ease forwards;
+}
+
+/* 卡片尺寸变体 */
+.nav-card.size-1x1 {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.nav-card.size-2x1 {
+    grid-column: span 2;
+    grid-row: span 1;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 16px 24px;
+}
+
+.nav-card.size-2x1 .nav-card-name {
+    text-align: left;
+}
+
+.nav-card.size-2x2 {
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 32px;
+}
+
+.nav-card.size-2x2 .nav-card-icon,
+.nav-card.size-2x2 .nav-card-icon-placeholder {
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+}
+
+.nav-card.size-2x2 .nav-card-name {
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.nav-card.size-4x1 {
+    grid-column: span 4;
+    grid-row: span 1;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 16px 24px;
+}
+
+@media (max-width: 768px) {
+
+    /* 移动端降级处理宽卡片 */
+    .nav-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .nav-card.size-4x1 {
+        grid-column: span 2;
+    }
+}
+
+@keyframes cardFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+.nav-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+}
+
+.nav-card:hover .nav-card-icon {
+    transform: scale(1.1);
+}
+
+.nav-card-icon-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.nav-card-name {
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Loading & Empty State */
+.loading-state,
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-muted);
+    width: 100%;
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(102, 126, 234, 0.2);
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 32px 24px;
+    color: var(--text-muted);
+    font-size: 13px;
+    position: relative;
+    z-index: 1;
+}

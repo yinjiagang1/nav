@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理 - iTab 导航</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>iTab 管理中心</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-target="panel-dashboard">概览</a>
+                <a href="#categories" class="nav-item" data-target="panel-categories">分类管理</a>
+                <a href="#sites" class="nav-item" data-target="panel-sites">站点管理</a>
+                <a href="#settings" class="nav-item" data-target="panel-settings">全局设置</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/" target="_blank" class="nav-item temp-link">查看网站</a>
+                <a href="#" class="nav-item temp-link text-danger" id="btnLogout">退出登录</a>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- Dashboard Panel -->
+            <section id="panel-dashboard" class="panel active">
+                <h1>概览</h1>
+                <p>欢迎来到 iTab 导航后台管理系统。</p>
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="stat-title">分类数量</div>
+                        <div class="stat-value" id="stat-category-count">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">站点数量</div>
+                        <div class="stat-value" id="stat-site-count">-</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Panel -->
+            <section id="panel-categories" class="panel">
+                <div class="panel-header">
+                    <h1>分类管理</h1>
+                    <button class="btn btn-primary" onclick="openCategoryModal()">新建分类</button>
+                </div>
+                <div class="table-container">
+                    <table class="table" id="categoriesTable">
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>图标</th>
+                                <th>名称</th>
+                                <th>父分类 (子分类支持)</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- JS 填充 --></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sites Panel -->
+            <section id="panel-sites" class="panel">
+                <div class="panel-header">
+                    <h1>站点管理</h1>
+                    <button class="btn btn-primary" onclick="openSiteModal()">添加站点</button>
+                </div>
+                <div class="filters" style="margin-bottom: 20px;">
+                    <select id="filterCategory" class="form-control" onchange="loadSites()">
+                        <option value="">-- 所有分类 --</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table class="table" id="sitesTable">
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>图标</th>
+                                <th>名称</th>
+                                <th>所属分类</th>
+                                <th>URL</th>
+                                <th>尺寸 / 透明度</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- JS 填充 --></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Settings Panel -->
+            <section id="panel-settings" class="panel">
+                <h1>全局设置</h1>
+                <div class="settings-card">
+                    <h3>系统设置</h3>
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label>背景模式 (bg_type)</label>
+                            <select name="bg_type" class="form-control">
+                                <option value="color">渐变纯色</option>
+                                <option value="image">静态图片</option>
+                                <option value="api">动态 API 照片</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>静态背景图 URL (仅静态图片模式生效)</label>
+                            <input type="text" name="bg_image_url" class="form-control" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>背景 API URL (推荐 Unsplash / Bing 等随机接口)</label>
+                            <input type="text" name="bg_api_url" class="form-control"
+                                placeholder="https://api.kdcc.cn/img/rand.php">
+                        </div>
+                        <div class="form-group">
+                            <label>背景刷新策略 (目前仅影响每次打开是否带时间戳)</label>
+                            <select name="bg_refresh_strategy" class="form-control">
+                                <option value="open">每次打开刷新</option>
+                                <option value="daily">每日刷新</option>
+                            </select>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label>默认卡片大小</label>
+                            <select name="default_card_size" class="form-control">
+                                <option value="1x1">1x1 (Small)</option>
+                                <option value="2x1">2x1 (Medium)</option>
+                                <option value="2x2">2x2 (Large)</option>
+                                <option value="4x1">4x1 (Wide)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>默认卡片透明度 (0.0 - 1.0)</label>
+                            <input type="number" step="0.05" name="default_card_opacity" class="form-control"
+                                placeholder="0.65">
+                        </div>
+                        <button type="submit" class="btn btn-primary">保存设置</button>
+                    </form>
+
+                    <hr style="margin: 40px 0;">
+
+                    <h3>安全设置</h3>
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label>修改后台密码</label>
+                            <input type="password" name="new_password" class="form-control" placeholder="输入新密码 (至少 6 位)"
+                                required>
+                        </div>
+                        <button type="submit" class="btn btn-warning">修改密码 (重新登录)</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 分类模态框 -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('categoryModal')">&times;</span>
+            <h2 id="catModalTitle">新建分类</h2>
+            <form id="categoryForm">
+                <input type="hidden" id="cat_id">
+                <div class="form-group">
+                    <label>分类名称 *</label>
+                    <input type="text" id="cat_name" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Emoji 图标</label>
+                    <input type="text" id="cat_icon" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>父分类 (留空为顶级)</label>
+                    <select id="cat_parent_id" class="form-control">
+                        <option value="">-- 无父分类 --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>排序 (数字越小越靠前)</label>
+                    <input type="number" id="cat_sort" value="0" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 站点模态框 -->
+    <div id="siteModal" class="modal modal-lg">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('siteModal')">&times;</span>
+            <h2 id="siteModalTitle">添加站点</h2>
+            <form id="siteForm">
+                <input type="hidden" id="site_id">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>站点名称 *</label>
+                        <input type="text" id="site_name" required class="form-control">
+                    </div>
+                    <div class="form-group col">
+                        <label>所属分类 *</label>
+                        <select id="site_category_id" required class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL 网址 *</label>
+                    <input type="url" id="site_url" required class="form-control">
+                </div>
+
+                <div class="form-row align-items-end">
+                    <div class="form-group col">
+                        <label>图标 URL / Base64</label>
+                        <input type="text" id="site_icon" class="form-control">
+                    </div>
+                    <div class="form-group col-auto" style="margin-bottom: 15px;">
+                        <label class="btn btn-secondary" style="cursor: pointer; display: inline-block;">
+                            上传图标 (KV)
+                            <input type="file" id="iconUpload" accept="image/*" style="display: none;"
+                                onchange="handleIconUpload(event)">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>卡片尺寸</label>
+                        <select id="site_card_size" class="form-control">
+                            <option value="">-- 跟随全局默认 --</option>
+                            <option value="1x1">1x1 (Small)</option>
+                            <option value="2x1">2x1 (Medium)</option>
+                            <option value="2x2">2x2 (Large)</option>
+                            <option value="4x1">4x1 (Wide)</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label>卡片透明度 (0到1)</label>
+                        <input type="number" step="0.05" id="site_card_opacity" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>无图标时占位符底色</label>
+                        <input type="color" id="site_bg_color" value="#346efd" class="form-control"
+                            style="height:42px;">
+                    </div>
+                    <div class="form-group col">
+                        <label>排序 (从小到大)</label>
+                        <input type="number" id="site_sort_order" value="0" class="form-control">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">保存站点</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+
+</html>

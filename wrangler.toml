@@ -1,0 +1,15 @@
+name = "itab-nav"
+compatibility_date = "2024-03-01"
+# pages_build_output_dir is used by Pages to know where to serve static files from
+pages_build_output_dir = "public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "itab-nav-db"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # 部署时需要替换为真实的 D1 ID
+preview_database_id = "DB" # 用于本地开发的虚拟 ID
+
+[[kv_namespaces]]
+binding = "ICONS"
+id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # 部署时需要替换为真实的 KV ID
+preview_id = "ICONS" # 用于本地开发的虚拟 ID
