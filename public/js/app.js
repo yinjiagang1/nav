@@ -24,9 +24,20 @@
             applySettings(navData.settings);
             renderCategoryTabs(navData.categories);
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetCategory = urlParams.get('category');
+
             if (navData.categories.length > 0) {
-                currentCategory = navData.categories[0].id;
+                // 如果 URL 指定了 category 并且存在，则选中它，否则选第一个
+                const exists = navData.categories.some(c => c.id === targetCategory);
+                currentCategory = exists ? targetCategory : navData.categories[0].id;
                 renderNavSections(navData.categories);
+
+                // 模拟点击以触发选中样式
+                setTimeout(() => {
+                    const tab = document.querySelector(`.category-tab[data-category="${currentCategory}"]`);
+                    if (tab) tab.click();
+                }, 0);
             } else {
                 document.getElementById('navSectionsContainer').innerHTML = '<div class="empty-state">暂无分类和导航数据</div>';
             }
