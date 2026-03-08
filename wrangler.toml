@@ -6,10 +6,11 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "itab-nav-db"
-database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # 部署时需要替换为真实的 D1 ID
+database_id = "38334f51-849f-4062-915f-707faf436724" # 部署时需要替换为真实的 D1 ID
 preview_database_id = "DB" # 用于本地开发的虚拟 ID
 
 [[kv_namespaces]]
 binding = "ICONS"
-id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # 部署时需要替换为真实的 KV ID
+id = "845e7084bc644a6f9df264f734be3646" # 部署时需要替换为真实的 KV ID
 preview_id = "ICONS" # 用于本地开发的虚拟 ID
+
