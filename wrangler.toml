@@ -1,11 +1,11 @@
-name = "itab-nav"
+name = "lioil-nav"
 compatibility_date = "2024-03-01"
 # pages_build_output_dir is used by Pages to know where to serve static files from
 pages_build_output_dir = "public"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "itab-nav-db"
+database_name = "lioil-nav-db"
 database_id = "38334f51-849f-4062-915f-707faf436724" # 部署时需要替换为真实的 D1 ID
 preview_database_id = "DB" # 用于本地开发的虚拟 ID
 
@@ -13,4 +13,5 @@ preview_database_id = "DB" # 用于本地开发的虚拟 ID
 binding = "ICONS"
 id = "845e7084bc644a6f9df264f734be3646" # 部署时需要替换为真实的 KV ID
 preview_id = "ICONS" # 用于本地开发的虚拟 ID
+
 
