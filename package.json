@@ -1,7 +1,7 @@
 {
-    "name": "itab-nav-fullstack",
+    "name": "lioil-nav-fullstack",
     "version": "1.0.0",
-    "description": "iTab Navigation Website - Cloudflare Pages Fullstack",
+    "description": "lioil Navigation Website - Cloudflare Pages Fullstack",
     "scripts": {
         "dev": "wrangler pages dev public --d1 DB --kv ICONS",
         "deploy": "wrangler pages deploy public",
@@ -11,4 +11,5 @@
     "devDependencies": {
         "wrangler": "^3.0.0"
     }
+
 }
